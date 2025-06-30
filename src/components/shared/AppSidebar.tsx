@@ -23,14 +23,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ChevronDown, TrendingUp, Settings, CircleUserRound, Dumbbell, ReceiptText, UserRoundCog, ListChecks, IdCard } from "lucide-react"
+import { ChevronDown, TrendingUp, Settings, CircleUserRound, Dumbbell, ReceiptText, ListChecks, IdCard, House } from "lucide-react"
 
 type Role = "admin" | "entrenador" | "cliente"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const menuByRole: Record<Role, { title: string; url: string; icon: any }[]> = {
     admin: [
-        { title: "Inicio", url: "/admin", icon: UserRoundCog },
+        { title: "Inicio", url: "/admin", icon: House },
         { title: "Clientes", url: "/admin/clientes", icon: CircleUserRound },
         { title: "Entrenadores", url: "/admin/entrenadores", icon: Dumbbell },
         { title: "Pagos", url: "/admin/pagos", icon: ReceiptText },
