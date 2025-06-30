@@ -14,7 +14,6 @@ export async function POST(req: Request) {
 
         await connectToDB()
         const user = await User.findOne({ email }).select("+password")
-
         if (!user || !(await bcrypt.compare(password, user.password))) {
             return NextResponse.json({ error: "Credenciales inválidas" }, { status: 401 })
         }
