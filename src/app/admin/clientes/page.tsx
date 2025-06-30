@@ -1,14 +1,7 @@
 "use client"
 import {
-    Calendar,
-    CreditCard,
-    DollarSign,
-    FileText,
     MoreHorizontal,
     Plus,
-    Users,
-    UserCheck,
-    AlertTriangle,
     Eye,
     Edit,
     Trash2,
@@ -24,9 +17,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-// Datos de ejemplo
 
 
 const recentClients = [
@@ -68,38 +58,10 @@ const recentClients = [
     },
 ]
 
-const trainers = [
-    {
-        id: "1",
-        name: "Pedro Sánchez",
-        specialty: "Entrenamiento Funcional",
-        clients: 25,
-        status: "Activo",
-        rating: 4.8,
-    },
-    {
-        id: "2",
-        name: "Laura Fernández",
-        specialty: "Yoga y Pilates",
-        clients: 30,
-        status: "Activo",
-        rating: 4.9,
-    },
-    {
-        id: "3",
-        name: "Miguel Torres",
-        specialty: "Musculación",
-        clients: 22,
-        status: "Activo",
-        rating: 4.7,
-    },
-]
 
 export default function AdminDashboard() {
     return (
         <div>
-                <Tabs defaultValue="clients" className="space-y-4">
-                    <TabsContent value="clients" className="space-y-4">
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
@@ -169,8 +131,6 @@ export default function AdminDashboard() {
                                 </Table>
                             </CardContent>
                         </Card>
-                    </TabsContent>
-                </Tabs>
             </div>
     )
 }
