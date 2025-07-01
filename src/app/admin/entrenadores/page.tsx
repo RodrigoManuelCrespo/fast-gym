@@ -1,10 +1,10 @@
 "use client"
 import {
+    Calendar,
     MoreHorizontal,
     Plus,
     Eye,
     Edit,
-    Trash2,
 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
@@ -19,89 +19,77 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 
-const recentClients = [
+
+const trainers = [
     {
         id: "1",
-        name: "Ana García",
-        email: "ana.garcia@email.com",
-        membership: "Premium",
+        name: "Pedro Sánchez",
+        specialty: "Entrenamiento Funcional",
+        clients: 25,
         status: "Activo",
-        joinDate: "2024-01-15",
-        expiryDate: "2024-07-15",
+        rating: 4.8,
     },
     {
         id: "2",
-        name: "Carlos López",
-        email: "carlos.lopez@email.com",
-        membership: "Básico",
+        name: "Laura Fernández",
+        specialty: "Yoga y Pilates",
+        clients: 30,
         status: "Activo",
-        joinDate: "2024-02-01",
-        expiryDate: "2024-08-01",
+        rating: 4.9,
     },
     {
         id: "3",
-        name: "María Rodríguez",
-        email: "maria.rodriguez@email.com",
-        membership: "Premium",
-        status: "Vencido",
-        joinDate: "2023-12-10",
-        expiryDate: "2024-06-10",
-    },
-    {
-        id: "4",
-        name: "Juan Martínez",
-        email: "juan.martinez@email.com",
-        membership: "Estándar",
+        name: "Miguel Torres",
+        specialty: "Musculación",
+        clients: 22,
         status: "Activo",
-        joinDate: "2024-01-20",
-        expiryDate: "2024-07-20",
+        rating: 4.7,
     },
 ]
-
 
 export default function AdminDashboard() {
     return (
         <div>
+
+
                         <Card>
                             <CardHeader className="flex flex-row items-center justify-between">
                                 <div>
-                                    <CardTitle>Clientes</CardTitle>
-                                    <CardDescription>Últimos Clientes registrados</CardDescription>
+                                    <CardTitle>Entrenadores</CardTitle>
+                                    <CardDescription>Personal de entrenamiento y sus especialidades</CardDescription>
                                 </div>
                                 <Button>
                                     <Plus className="mr-2 h-4 w-4" />
-                                    Agregar Cliente
+                                    Agregar Entrenador
                                 </Button>
                             </CardHeader>
                             <CardContent>
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead>Cliente</TableHead>
-                                            <TableHead>Membresía</TableHead>
+                                            <TableHead>Entrenador</TableHead>
+                                            <TableHead>Especialidad</TableHead>
+                                            <TableHead>Clientes</TableHead>
+                                            <TableHead>Calificación</TableHead>
                                             <TableHead>Estado</TableHead>
-                                            <TableHead>Vencimiento</TableHead>
                                             <TableHead>Acciones</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {recentClients.map((client) => (
-                                            <TableRow key={client.id}>
+                                        {trainers.map((trainer) => (
+                                            <TableRow key={trainer.id}>
+                                                <TableCell className="font-medium">{trainer.name}</TableCell>
+                                                <TableCell>{trainer.specialty}</TableCell>
+                                                <TableCell>{trainer.clients}</TableCell>
                                                 <TableCell>
-                                                    <div>
-                                                        <div className="font-medium">{client.name}</div>
-                                                        <div className="text-sm text-muted-foreground">{client.email}</div>
+                                                    <div className="flex items-center">
+                                                        <span className="mr-1">⭐</span>
+                                                        {trainer.rating}
                                                     </div>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Badge variant="outline">{client.membership}</Badge>
+                                                    <Badge variant="default">{trainer.status}</Badge>
                                                 </TableCell>
-                                                <TableCell>
-                                                    <Badge variant={client.status === "Activo" ? "default" : "destructive"}>
-                                                        {client.status}
-                                                    </Badge>
-                                                </TableCell>
-                                                <TableCell>{client.expiryDate}</TableCell>
                                                 <TableCell>
                                                     <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
@@ -112,15 +100,15 @@ export default function AdminDashboard() {
                                                         <DropdownMenuContent align="end">
                                                             <DropdownMenuItem>
                                                                 <Eye className="mr-2 h-4 w-4" />
-                                                                Ver Detalles
+                                                                Ver Perfil
                                                             </DropdownMenuItem>
                                                             <DropdownMenuItem>
                                                                 <Edit className="mr-2 h-4 w-4" />
                                                                 Editar
                                                             </DropdownMenuItem>
-                                                            <DropdownMenuItem className="text-red-600">
-                                                                <Trash2 className="mr-2 h-4 w-4" />
-                                                                Eliminar
+                                                            <DropdownMenuItem>
+                                                                <Calendar className="mr-2 h-4 w-4" />
+                                                                Ver Horarios
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
                                                     </DropdownMenu>

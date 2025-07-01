@@ -23,27 +23,27 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ChevronDown, TrendingUp, Settings } from "lucide-react"
+import { ChevronDown, TrendingUp, Settings, CircleUserRound, Dumbbell, ReceiptText, ListChecks, IdCard, House } from "lucide-react"
 
 type Role = "admin" | "entrenador" | "cliente"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const menuByRole: Record<Role, { title: string; url: string; icon: any }[]> = {
     admin: [
-        { title: "Dashboard", url: "/admin", icon: TrendingUp },
-        { title: "Clientes", url: "/admin/clientes", icon: Settings },
-        { title: "Entrenadores", url: "/admin/entrenadores", icon: Settings },
-        { title: "Pagos", url: "/admin/pagos", icon: Settings },
+        { title: "Inicio", url: "/admin", icon: House },
+        { title: "Clientes", url: "/admin/clientes", icon: CircleUserRound },
+        { title: "Entrenadores", url: "/admin/entrenadores", icon: Dumbbell },
+        { title: "Pagos", url: "/admin/pagos", icon: ReceiptText },
     ],
     entrenador: [
-        { title: "Inicio", url: "/entrenador", icon: TrendingUp },
-        { title: "Mis Clientes", url: "/entrenador/clientes", icon: Settings },
-        { title: "Rutinas", url: "/entrenador/rutinas", icon: Settings },
+        { title: "Inicio", url: "/entrenador", icon: Dumbbell },
+        { title: "Mis Clientes", url: "/entrenador/clientes", icon: CircleUserRound },
+        { title: "Rutinas", url: "/entrenador/rutinas", icon: ListChecks  },
     ],
     cliente: [
-        { title: "Mi Panel", url: "/cliente", icon: TrendingUp },
-        { title: "Mis Rutinas", url: "/cliente/rutinas", icon: Settings },
-        { title: "Membresía", url: "/cliente/membresia", icon: Settings },
+        { title: "Mi Panel", url: "/cliente", icon: CircleUserRound },
+        { title: "Mis Rutinas", url: "/cliente/rutinas", icon: ListChecks },
+        { title: "Membresía", url: "/cliente/membresia", icon: IdCard },
     ],
 }
 
