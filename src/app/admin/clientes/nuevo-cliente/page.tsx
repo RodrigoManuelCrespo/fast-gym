@@ -1,77 +1,131 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export default function NewClientForm() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  })
+    const [formData, setFormData] = useState({
+        nombre: "",
+        email: "",
+        apellido: "",
+        dni: "",
+        telefono: "",
+    });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Nuevo cliente:", formData)
-  }
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log("Nuevo cliente:", formData);
 
-  return (
-    <div className="w-screen h-screen flex items-center justify-center px-4 overflow-x-hidden box-border">
-      <Card className="w-full max-w-full box-border">
-        <CardHeader>
-          <CardTitle>Nuevo Cliente</CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <form onSubmit={handleSubmit} className="space-y-6 w-full box-border">
-            <div className="space-y-1 w-full box-border">
-              <p className="text-sm text-muted-foreground">Nombre</p>
-              <Input
-                name="name"
-                placeholder="Ej: Ana López"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full"
-              />
-            </div>
+        try {
+            const response = await fetch("http://localhost:3000/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+            console.log(response)
 
-            <div className="space-y-1 w-full box-border">
-              <p className="text-sm text-muted-foreground">Correo electrónico</p>
-              <Input
-                name="email"
-                type="email"
-                placeholder="ana@email.com"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full"
-              />
-            </div>
+            if (!response.ok) {
+                // Manejo de error simple
+                const errorData = await response.json();
+                console.error("Error en el registro:", errorData);
+                alert(`Error: ${errorData.message || "Algo salió mal"}`);
+                return;
+            }
 
-            <div className="space-y-1 w-full box-border">
-              <p className="text-sm text-muted-foreground">Teléfono</p>
-              <Input
-                name="phone"
-                type="tel"
-                placeholder="11 2345 6789"
-                value={formData.phone}
-                onChange={handleChange}
-                className="w-full"
-              />
-            </div>
+            const data = await response.json();
+            console.log("Registro exitoso:", data);
+            alert("Cliente registrado correctamente");
+            // Acá podrías limpiar el formulario o redirigir, etc.
+            setFormData({
+                nombre: "",
+                email: "",
+                apellido: "",
+                dni: "",
+                telefono: "",
+            });
+        } catch (error) {
+            console.error("Error al conectar con el servidor:", error);
+            alert("Error de conexión. Intenta más tarde.");
+        }
+    };
 
-            <Button type="submit" className="w-full">
-              Guardar Cliente
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
-  )
+
+    return (
+        <Card className="max-w-mx mx-auto">
+            <CardHeader>
+                <CardTitle>Nuevo Cliente</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="space-y-1">
+                        <p className="text-sm text-muted-foreground">Nombre</p>
+                        <Input
+                            name="nombre"
+                            placeholder="Ana"
+                            value={formData.nombre}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="space-y-1">
+                        <p className="text-sm text-muted-foreground">Apellido</p>
+                        <Input
+                            name="apellido"
+                            placeholder="López"
+                            value={formData.apellido}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="space-y-1">
+                        <p className="text-sm text-muted-foreground">DNI</p>
+                        <Input
+                            name="dni"
+                            placeholder="41678907"
+                            value={formData.dni}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="space-y-1">
+                        <p className="text-sm text-muted-foreground">Correo electrónico</p>
+                        <Input
+                            name="email"
+                            type="email"
+                            placeholder="ana@email.com"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <div className="space-y-1">
+                        <p className="text-sm text-muted-foreground">Teléfono</p>
+                        <Input
+                            name="telefono"
+                            type="tel"
+                            placeholder="3411111111"
+                            value={formData.telefono}
+                            onChange={handleChange}
+                        />
+                    </div>
+
+                    <Button type="submit" className="w-full">
+                        Guardar Cliente
+                    </Button>
+                </form>
+            </CardContent>
+        </Card>
+    );
 }
