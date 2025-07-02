@@ -5,16 +5,16 @@ import bcrypt from "bcryptjs"
 
 export async function POST(req: Request) {
     try {
-        const { email, password, role, nombre, apellido, telefono } = await req.json()
+        const { email, password, role, nombre, apellido, telefono, dni } = await req.json()
 
-        if (!email || !password || !role) {
+        if (!email || !role) {
             return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 })
         }
 
         // Validación condicional por rol
         if (role === "cliente" || role === "entrenador") {
-            if (!nombre || !apellido) {
-                return NextResponse.json({ error: "Faltan nombre o apellido" }, { status: 400 })
+            if (!nombre || !apellido || !dni) {
+                return NextResponse.json({ error: "Faltan nombre, apellido o DNI" }, { status: 400 })
             }
         }
 
@@ -25,7 +25,9 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "El usuario ya existe" }, { status: 409 })
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10)
+        // Determinar contraseña a usar
+        const plainPassword = password || dni
+        const hashedPassword = await bcrypt.hash(plainPassword, 10)
 
         const newUser = await User.create({
             email,
@@ -34,6 +36,7 @@ export async function POST(req: Request) {
             nombre,
             apellido,
             telefono,
+            dni,
         })
 
         return NextResponse.json({ message: "Usuario creado", user: newUser }, { status: 201 })
