@@ -12,6 +12,7 @@ export default function NewClientForm() {
         apellido: "",
         dni: "",
         telefono: "",
+        role: "cliente",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +21,6 @@ export default function NewClientForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Nuevo cliente:", formData);
 
         try {
             const response = await fetch("http://localhost:3000/api/auth/register", {
@@ -30,7 +30,6 @@ export default function NewClientForm() {
                 },
                 body: JSON.stringify(formData),
             });
-            console.log(response)
 
             if (!response.ok) {
                 // Manejo de error simple
@@ -50,6 +49,7 @@ export default function NewClientForm() {
                 apellido: "",
                 dni: "",
                 telefono: "",
+                role: "cliente",
             });
         } catch (error) {
             console.error("Error al conectar con el servidor:", error);
