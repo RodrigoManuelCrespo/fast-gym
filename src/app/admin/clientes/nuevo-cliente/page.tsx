@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner"
 
 const formFields = [
     { label: "Nombre", name: "nombre", placeholder: "Ingresá el nombre del cliente" },
@@ -42,11 +43,11 @@ export default function NewClientForm() {
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error("Error en el registro:", errorData);
-                alert(`Error: ${errorData.message || "Algo salió mal"}`);
+                toast.error(`Error: ${errorData.error || "Algo salió mal"}`);
                 return;
             }
 
-            alert("Cliente registrado correctamente");
+            toast.success("Cliente registrado correctamente");
             setFormData({
                 nombre: "",
                 email: "",
@@ -57,12 +58,11 @@ export default function NewClientForm() {
             });
         } catch (error) {
             console.error("Error al conectar con el servidor:", error);
-            alert("Error de conexión. Intenta más tarde.");
         }
     };
 
     return (
-        <Card className="max-w-mx mx-auto">
+        <Card>
             <CardHeader>
                 <CardTitle>Nuevo Cliente</CardTitle>
             </CardHeader>
@@ -70,7 +70,7 @@ export default function NewClientForm() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {formFields.map(({ name, label, placeholder, type = "text" }) => (
                         <div key={name} className="space-y-1">
-                            <p className="text-sm text-muted-foreground">{label}</p>
+                            <p className="text-sm mb-2">{label}</p>
                             <Input
                                 name={name}
                                 type={type}
@@ -81,10 +81,11 @@ export default function NewClientForm() {
                             />
                         </div>
                     ))}
-
-                    <Button type="submit" className="w-full">
-                        Guardar Cliente
-                    </Button>
+                    <div className="flex justify-end mt-8">
+                        <Button type="submit" className="w-full sm:w-auto">
+                            Guardar Cliente
+                        </Button>
+                    </div>
                 </form>
             </CardContent>
         </Card>
