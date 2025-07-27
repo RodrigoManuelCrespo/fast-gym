@@ -1,4 +1,4 @@
-import { DatosRegistro } from "@/types/AuthTypes"
+import { DatosRegistro } from "@/types/AuthType"
 
 const BASE_URL = "/api/auth"
 

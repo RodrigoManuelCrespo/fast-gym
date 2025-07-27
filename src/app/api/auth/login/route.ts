@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { connectToDB } from "@/lib/mongodb"
-import { User } from "@/models/User"
+import { User } from "@/models/UserModel"
 import { signJWT } from "@/lib/jwt"
 import bcrypt from "bcryptjs"
 

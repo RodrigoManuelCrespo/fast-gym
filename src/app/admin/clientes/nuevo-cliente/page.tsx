@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { authService } from "@/lib/services/authService"
-import { RegistroCliente } from "@/types/AuthTypes"
+import { RegistroCliente } from "@/types/AuthType"
 
 const formFields = [
     { label: "Nombre", name: "nombre", placeholder: "Ingresá el nombre del cliente" },
