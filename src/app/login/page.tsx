@@ -4,6 +4,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import { authService } from "@/lib/services/authService"
 
 export default function LoginPage() {
     const [email, setEmail] = useState("")
@@ -15,35 +17,30 @@ export default function LoginPage() {
         e.preventDefault()
         setLoading(true)
 
-        const res = await fetch("/api/auth/login", {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-            headers: { "Content-Type": "application/json" },
-        })
+        try {
+            const data = await authService.login(email, password)
 
-        const data = await res.json()
-        setLoading(false)
+            toast.success("Inicio de sesión exitoso")
 
-        if (!res.ok) {
-            console.error(data.error || "Error al iniciar sesión")
-            return
-        }
-
-        localStorage.setItem("token", data.token)
-
-        // Redirige según el rol
-        switch (data.role) {
-            case "admin":
-                router.push("/admin")
-                break
-            case "entrenador":
-                router.push("/entrenador")
-                break
-            case "cliente":
-                router.push("/cliente")
-                break
-            default:
-                console.error("Rol desconocido")
+            switch (data.role) {
+                case "admin":
+                    router.push("/admin")
+                    break
+                case "entrenador":
+                    router.push("/entrenador")
+                    break
+                case "cliente":
+                    router.push("/cliente")
+                    break
+                default:
+                    console.error("Rol desconocido")
+            }
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message)
+            }
+        } finally {
+            setLoading(false)
         }
     }
 

@@ -1,10 +1,12 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
+import { authService } from "@/lib/services/authService"
+import { RegistroCliente } from "@/types/AuthTypes"
 
 const formFields = [
     { label: "Nombre", name: "nombre", placeholder: "Ingresá el nombre del cliente" },
@@ -15,39 +17,24 @@ const formFields = [
 ]
 
 export default function NewClientForm() {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<RegistroCliente>({
         nombre: "",
         email: "",
         apellido: "",
         dni: "",
         telefono: "",
         role: "cliente",
-    });
+    })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+        setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+        e.preventDefault()
         try {
-            const response = await fetch("http://localhost:3000/api/auth/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                console.error("Error en el registro:", errorData);
-                toast.error(`Error: ${errorData.error || "Algo salió mal"}`);
-                return;
-            }
-
-            toast.success("Cliente registrado correctamente");
+            await authService.register(formData)
+            toast.success("Cliente registrado correctamente")
             setFormData({
                 nombre: "",
                 email: "",
@@ -55,11 +42,13 @@ export default function NewClientForm() {
                 dni: "",
                 telefono: "",
                 role: "cliente",
-            });
-        } catch (error) {
-            console.error("Error al conectar con el servidor:", error);
+            })
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message)
+            }
         }
-    };
+    }
 
     return (
         <Card>
@@ -89,5 +78,5 @@ export default function NewClientForm() {
                 </form>
             </CardContent>
         </Card>
-    );
+    )
 }
