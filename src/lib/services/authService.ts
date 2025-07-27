@@ -1,4 +1,5 @@
 import { DatosRegistro } from "@/types/AuthType"
+import { authFetch } from "@/lib/authFetch"
 
 const BASE_URL = "/api/auth"
 
@@ -20,16 +21,9 @@ export const authService = {
     },
 
     register: async (formData: DatosRegistro) => {
-        const res = await fetch(`${BASE_URL}/register`, {
+        return authFetch(`${BASE_URL}/register`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData),
         })
-
-        const data = await res.json()
-
-        if (!res.ok) throw new Error(data.error || "Error al registrar")
-
-        return data
     },
 }

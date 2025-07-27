@@ -2,9 +2,13 @@ import { NextResponse } from "next/server"
 import { connectToDB } from "@/lib/mongodb"
 import { User } from "@/models/UserModel"
 import bcrypt from "bcryptjs"
-
+import { withAuthRoute } from "@/lib/withAuthRoute"
 
 export async function POST(req: Request) {
+    // ✅ Solo permite admins
+    const result = await withAuthRoute(req, ["admin"])
+    if (!("user" in result)) return result
+
     try {
         const { email, password, role, nombre, apellido, telefono, dni } = await req.json()
 
@@ -12,7 +16,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Faltan campos obligatorios" }, { status: 400 })
         }
 
-        // Validación condicional por rol
         if (role === "cliente" || role === "entrenador") {
             if (!nombre || !apellido || !dni) {
                 return NextResponse.json({ error: "Faltan nombre, apellido o DNI" }, { status: 400 })
@@ -26,7 +29,6 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "El usuario ya existe" }, { status: 409 })
         }
 
-        // Determinar contraseña a usar
         const plainPassword = password || dni
         const hashedPassword = await bcrypt.hash(plainPassword, 10)
 
