@@ -9,10 +9,9 @@ const userSchema = new Schema(
             enum: ["admin", "entrenador", "cliente"],
             required: true,
         },
-
-        // Campos opcionales
-        nombre: { type: String },
-        apellido: { type: String },
+        nombre: { type: String, require: true },
+        apellido: { type: String, require: true },
+        dni: { type: String, require: true },
         telefono: { type: String },
     },
     { timestamps: true }
