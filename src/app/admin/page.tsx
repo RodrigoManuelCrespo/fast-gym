@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Link from "next/link"
+
 
 // Datos de ejemplo
 const stats = [
@@ -162,9 +164,11 @@ export default function AdminDashboard() {
                                 <Plus className="h-5 w-5" />
                                 Nuevo Cliente
                             </Button>
-                            <Button variant="outline" className="h-20 flex-col gap-2">
-                                <UserCheck className="h-5 w-5" />
-                                Nuevo Entrenador
+                            <Button className="h-20 flex-col gap-2">
+                                <Link href="/admin/entrenadores/nuevo-entrenador" className="flex flex-col items-center">
+                                    <UserCheck className="h-5 w-5" />
+                                    Nuevo Entrenador
+                                </Link>
                             </Button>
                             <Button variant="outline" className="h-20 flex-col gap-2">
                                 <CreditCard className="h-5 w-5" />
@@ -265,10 +269,12 @@ export default function AdminDashboard() {
                                     <CardTitle>Entrenadores</CardTitle>
                                     <CardDescription>Personal de entrenamiento y sus especialidades</CardDescription>
                                 </div>
-                                <Button>
-                                    <Plus className="mr-2 h-4 w-4" />
-                                    Agregar Entrenador
-                                </Button>
+                                <Link href="/admin/entrenadores/nuevo-entrenador">
+                                    <Button>
+                                        <Plus className="mr-2 h-4 w-4" />
+                                        Agregar Entrenador
+                                    </Button>
+                                </Link>
                             </CardHeader>
                             <CardContent>
                                 <Table>
