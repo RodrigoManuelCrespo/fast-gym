@@ -123,7 +123,7 @@ const exerciseData = [
 
 export default function MobileExerciseRoutine() {
     const [expandedExercises, setExpandedExercises] = useState<number[]>([])
-    const [completedExercises, setCompletedExercises] = useState<number[]>([])
+    const [completedExercises] = useState<number[]>([])
 
     const toggleExercise = (exerciseId: number) => {
         setExpandedExercises((prev) =>
