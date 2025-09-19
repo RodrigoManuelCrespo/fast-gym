@@ -1,30 +1,32 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
-// import { pagoService } from "@/lib/services/pagoService"
-// import { clienteService } from "@/lib/services/clienteService"
+import { pagoService } from "@/lib/services/pagoService"
+import { clienteService } from "@/lib/services/clienteService"
+import { Cliente } from "@/types/ClienteType"
+import { RegistroPago } from "@/types/PagoType"
 
 export default function NuevoPagoForm() {
-    const [clientes] = useState<{ id: string; nombre: string; apellido: string }[]>([])
-    const [form, setForm] = useState({
+    const [clientes, setClientes] = useState<Array<Cliente>>([])
+    const [form, setForm] = useState<RegistroPago>({
         clienteId: "",
-        monto: "",
+        monto: 0,
         metodo: "efectivo",
         tipoMembresia: "mensual",
         observaciones: "",
     })
 
-    // useEffect(() => {
-    //     clienteService.list()
-    //         .then((res) => setClientes(res.data))
-    //         .catch(() => toast.error("Error al cargar clientes"))
-    // }, [])
+    useEffect(() => {
+        clienteService.clientes()
+            .then((res) => setClientes(res.data))
+            .catch(() => toast.error("Error al cargar clientes"))
+    }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -37,17 +39,18 @@ export default function NuevoPagoForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            // await pagoService.registrarConMembresia({
-            //     clienteId: form.clienteId,
-            //     monto: Number(form.monto),
-            //     metodo: form.metodo as "efectivo" | "tarjeta" | "transferencia",
-            //     tipoMembresia: form.tipoMembresia as "mensual" | "trimestral" | "anual",
-            //     observaciones: form.observaciones,
-            // })
+            const res = await pagoService.registrarPago({
+                clienteId: form.clienteId,
+                monto: Number(form.monto),
+                metodo: form.metodo as "efectivo" | "tarjeta" | "transferencia",
+                tipoMembresia: form.tipoMembresia as "mensual" | "trimestral" | "anual",
+                observaciones: form.observaciones,
+            })
+            console.log(res)
             toast.success("Pago y membresía registrados correctamente")
             setForm({
                 clienteId: "",
-                monto: "",
+                monto: 0,
                 metodo: "efectivo",
                 tipoMembresia: "mensual",
                 observaciones: "",
@@ -75,7 +78,7 @@ export default function NuevoPagoForm() {
                             </SelectTrigger>
                             <SelectContent>
                                 {clientes.map((c) => (
-                                    <SelectItem key={c.id} value={c.id}>
+                                    <SelectItem key={c._id} value={c._id}>
                                         {c.nombre} {c.apellido}
                                     </SelectItem>
                                 ))}
