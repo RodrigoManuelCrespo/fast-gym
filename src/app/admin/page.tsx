@@ -81,8 +81,10 @@ export default function AdminDashboard() {
                     <CardContent>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                             <Button className="h-20 flex-col gap-2">
-                                <Plus className="h-5 w-5" />
-                                Nuevo Cliente
+                                <Link href="/admin/clientes/nuevo-cliente" className="flex flex-col items-center">
+                                    <Plus className="h-5 w-5" />
+                                    Nuevo Cliente
+                                </Link>
                             </Button>
                             <Button className="h-20 flex-col gap-2">
                                 <Link href="/admin/entrenadores/nuevo-entrenador" className="flex flex-col items-center">
@@ -90,11 +92,13 @@ export default function AdminDashboard() {
                                     Nuevo Entrenador
                                 </Link>
                             </Button>
-                            <Button variant="outline" className="h-20 flex-col gap-2">
-                                <CreditCard className="h-5 w-5" />
-                                Registrar Pago
+                            <Button className="h-20 flex-col gap-2">
+                                <Link href="/admin/pagos/nuevo-pago" className="flex flex-col items-center">
+                                    <CreditCard className="h-5 w-5" />
+                                    Registrar Pago
+                                </Link>
                             </Button>
-                            <Button variant="outline" className="h-20 flex-col gap-2">
+                            <Button className="h-20 flex-col gap-2">
                                 <FileText className="h-5 w-5" />
                                 Generar Reporte
                             </Button>
