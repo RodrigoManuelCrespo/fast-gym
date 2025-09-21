@@ -4,7 +4,7 @@ import { User } from "@/models/UserModel"
 import { withAuthRoute } from "@/lib/withAuthRoute"
 
 export async function GET(req: Request) {
-    const result = await withAuthRoute(req, ["admin"])
+    const result = await withAuthRoute(req, ["admin", "entrenador"])
     if (!("user" in result)) return result
 
     try {
