@@ -38,7 +38,8 @@ const menuByRole: Record<Role, { title: string; url: string; icon: any }[]> = {
     entrenador: [
         { title: "Inicio", url: "/entrenador", icon: Dumbbell },
         { title: "Mis Clientes", url: "/entrenador/clientes", icon: CircleUserRound },
-        { title: "Rutinas", url: "/entrenador/rutinas", icon: ListChecks  },
+        { title: "Rutinas", url: "/entrenador/rutinas", icon: ListChecks },
+        { title: "Ejercicios", url: "/entrenador/ejercicios", icon: ListChecks },
     ],
     cliente: [
         { title: "Mi Panel", url: "/cliente", icon: CircleUserRound },
