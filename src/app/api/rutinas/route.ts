@@ -6,15 +6,23 @@ import { withAuthRoute } from "@/lib/withAuthRoute"
 import { Rutina } from "@/models/RutinaModel"
 
 export async function GET(req: Request) {
-    const result = await withAuthRoute(req, ["entrenador"])
+    const result = await withAuthRoute(req, ["entrenador", "cliente"])
     if (!("user" in result)) return result
 
     try {
         await connectToDB()
 
-        const rutinas = await Rutina.find({ entrenadorId: result.user.id })
-            .populate("clienteId", "nombre apellido") // para mostrar nombre del cliente
-            .sort({ createdAt: -1 })
+        let rutinas
+
+        if (result.user.role === "entrenador") {
+            rutinas = await Rutina.find({ entrenadorId: result.user.id })
+                .populate("clienteId", "nombre apellido")
+                .sort({ createdAt: -1 })
+        } else {
+            rutinas = await Rutina.find({ clienteId: result.user.id })
+                .populate("entrenadorId", "nombre apellido")
+                .sort({ createdAt: -1 })
+        }
 
         return NextResponse.json({ data: rutinas }, { status: 200 })
     } catch (error) {

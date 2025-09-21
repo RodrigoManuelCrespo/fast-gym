@@ -28,7 +28,7 @@ export default function RutinasPage() {
     useEffect(() => {
         const fetch = async () => {
             try {
-                const res = await rutinaService.listarRutina()
+                const res = await rutinaService.listarRutinas()
                 setRutinas(res.data)
             } catch (error) {
                 console.error("Error al cargar rutinas:", error)
