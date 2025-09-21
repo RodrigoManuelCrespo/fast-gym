@@ -1,27 +1,26 @@
 "use client"
 
-import {
-    MoreHorizontal,
-    Plus,
-    Eye,
-    Edit,
-    Trash2,
-} from "lucide-react"
+import { MoreHorizontal, Plus, Eye, Edit, Trash2 } from "lucide-react"
+
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import Link from "next/link"
+import { toast } from "sonner"
 import { clienteService } from "@/lib/services/clienteService"
-import { Cliente } from "@/types/ClienteType"
 
-export default function ClientesPage() {
+interface Cliente {
+    _id: string
+    nombre: string
+    apellido: string
+    email: string
+    telefono?: string
+    createdAt: string
+}
+
+export default function AdminDashboard() {
     const [clientes, setClientes] = useState<Cliente[]>([])
     const [loading, setLoading] = useState(true)
 
@@ -30,8 +29,13 @@ export default function ClientesPage() {
             try {
                 const res = await clienteService.clientes()
                 setClientes(res.data)
-            } catch (error) {
+            } catch (error: unknown) {
                 console.error("Error al cargar clientes:", error)
+                if (error instanceof Error) {
+                    toast.error(error.message)
+                } else {
+                    toast.error("Error al cargar clientes")
+                }
             } finally {
                 setLoading(false)
             }
@@ -75,8 +79,10 @@ export default function ClientesPage() {
                                 {clientes.map((cliente) => (
                                     <TableRow key={cliente._id}>
                                         <TableCell>
-                                            <div className="font-medium">
-                                                {cliente.nombre} {cliente.apellido}
+                                            <div>
+                                                <div className="font-medium">
+                                                    {cliente.nombre} {cliente.apellido}
+                                                </div>
                                             </div>
                                         </TableCell>
                                         <TableCell>{cliente.email}</TableCell>
@@ -117,6 +123,8 @@ export default function ClientesPage() {
         </div>
     )
 }
+
+
 
 
 
