@@ -5,6 +5,25 @@ import { connectToDB } from "@/lib/mongodb"
 import { withAuthRoute } from "@/lib/withAuthRoute"
 import { Rutina } from "@/models/RutinaModel"
 
+export async function GET(req: Request) {
+    const result = await withAuthRoute(req, ["entrenador"])
+    if (!("user" in result)) return result
+
+    try {
+        await connectToDB()
+
+        const rutinas = await Rutina.find({ entrenadorId: result.user.id })
+            .populate("clienteId", "nombre apellido") // para mostrar nombre del cliente
+            .sort({ createdAt: -1 })
+
+        return NextResponse.json({ data: rutinas }, { status: 200 })
+    } catch (error) {
+        console.error("Error al obtener rutinas:", error)
+        return NextResponse.json({ error: "Error al obtener rutinas" }, { status: 500 })
+    }
+}
+
+
 export async function POST(req: Request) {
     const result = await withAuthRoute(req, ["entrenador"])
     if (!("user" in result)) return result

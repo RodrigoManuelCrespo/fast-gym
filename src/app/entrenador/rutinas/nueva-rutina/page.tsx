@@ -62,7 +62,7 @@ export default function NuevaRutinaForm() {
   const agregarEjercicio = () => {
     setForm({
       ...form,
-      ejercicios: [...form.ejercicios, { ejercicioId: "", series: 3, repeticiones: 12, descanso: "60s" }],
+      ejercicios: [...form.ejercicios, { ejercicioId: "", series: 4, repeticiones: 12, descanso: "60s" }],
     })
   }
 
@@ -84,13 +84,6 @@ export default function NuevaRutinaForm() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
-
-          {/* Nombre */}
-          <div>
-            <p className="text-sm mb-1">Nombre</p>
-            <Input name="nombre" value={form.nombre} onChange={handleChange} required />
-          </div>
-
           {/* Cliente */}
           <div>
             <p className="text-sm mb-1">Cliente</p>
@@ -106,6 +99,12 @@ export default function NuevaRutinaForm() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Nombre */}
+          <div>
+            <p className="text-sm mb-1">Nombre</p>
+            <Input name="nombre" value={form.nombre} onChange={handleChange} required />
           </div>
 
           {/* Días */}
@@ -129,45 +128,79 @@ export default function NuevaRutinaForm() {
             <div className="flex justify-between items-center">
               <p className="text-sm font-medium">Ejercicios</p>
               <Button type="button" onClick={agregarEjercicio} size="sm">
-                Agregar
+                Agregar Ejercicio
               </Button>
             </div>
+
+            {/* Header de columnas */}
+            <div className="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_40px] gap-4 text-sm text-muted-foreground">
+              <span>Ejercicio</span>
+              <span>Series</span>
+              <span>Reps</span>
+              <span>Descanso</span>
+              <span></span>
+            </div>
+
             {form.ejercicios.map((ej, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_40px] gap-4 items-center">
+                {/* Select ejercicio */}
                 <Select
                   value={ej.ejercicioId}
                   onValueChange={(val) => handleEjercicioChange(index, "ejercicioId", val)}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Ejercicio" />
+                  <SelectTrigger className="w-full truncate">
+                    <SelectValue placeholder="Ejercicio" className="truncate" />
                   </SelectTrigger>
                   <SelectContent>
                     {ejerciciosDisponibles.map((e) => (
-                      <SelectItem key={e._id ?? ''} value={e._id ?? ''}>{e.nombre}</SelectItem>
+                      <SelectItem key={e._id ?? ''} value={e._id ?? ''} className="truncate">
+                        {e.nombre}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+
+                {/* Series */}
                 <Input
                   type="number"
                   placeholder="Series"
                   value={ej.series}
                   onChange={(e) => handleEjercicioChange(index, "series", Number(e.target.value))}
                 />
+
+                {/* Reps */}
                 <Input
                   type="number"
                   placeholder="Reps"
                   value={ej.repeticiones}
                   onChange={(e) => handleEjercicioChange(index, "repeticiones", Number(e.target.value))}
                 />
+
+                {/* Descanso */}
                 <Input
                   type="text"
-                  placeholder="Descanso (ej: 60s)"
+                  placeholder="60s"
                   value={ej.descanso}
                   onChange={(e) => handleEjercicioChange(index, "descanso", e.target.value)}
                 />
+
+                {/* Botón eliminar */}
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  onClick={() => {
+                    const nuevos = [...form.ejercicios]
+                    nuevos.splice(index, 1)
+                    setForm({ ...form, ejercicios: nuevos })
+                  }}
+                >
+                  ×
+                </Button>
               </div>
             ))}
           </div>
+
 
           {/* Observaciones */}
           <div>
