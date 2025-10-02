@@ -1,3 +1,5 @@
+/* MODIFICAR PARA ENTRENADOR */
+
 import { NextResponse } from "next/server"
 import { connectToDB } from "@/lib/mongodb"
 import { User } from "@/models/UserModel"
@@ -10,11 +12,11 @@ export async function GET(req: Request) {
     try {
         await connectToDB()
 
-        const clientes = await User.find({ role: "cliente" }).select("-password")
-        //console.log(clientes); /* muestra lo que me trae de la base de datos */
-        return NextResponse.json({ data: clientes }, { status: 200 })
+        const entrenadores = await User.find({ role: "entrenador" }).select("-password")
+
+        return NextResponse.json({ data: entrenadores }, { status: 200 })
     } catch (error) {
-        console.error("Error al obtener clientes:", error)
-        return NextResponse.json({ error: "Error al obtener clientes" }, { status: 500 })
+        console.error("Error al obtener entrenadores:", error)
+        return NextResponse.json({ error: "Error al obtener entrenadores" }, { status: 500 })
     }
 }

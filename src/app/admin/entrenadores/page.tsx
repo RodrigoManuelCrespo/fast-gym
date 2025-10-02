@@ -7,86 +7,69 @@ import {
     Edit,
 } from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+import { Entrenador } from "@/types/EntrenadorType"
+import { entrenadorService } from "@/lib/services/entrenadorService"
+import Link from "next/link"
 
+export default function EntrenadoresPage() {
+    const [entrenadores, setEntrenadores] = useState<Array<Entrenador>>([]);
 
-
-const trainers = [
-    {
-        id: "1",
-        name: "Pedro Sánchez",
-        specialty: "Entrenamiento Funcional",
-        clients: 25,
-        status: "Activo",
-        rating: 4.8,
-    },
-    {
-        id: "2",
-        name: "Laura Fernández",
-        specialty: "Yoga y Pilates",
-        clients: 30,
-        status: "Activo",
-        rating: 4.9,
-    },
-    {
-        id: "3",
-        name: "Miguel Torres",
-        specialty: "Musculación",
-        clients: 22,
-        status: "Activo",
-        rating: 4.7,
-    },
-]
-
-export default function AdminDashboard() {
+    useEffect(() => {
+        entrenadorService.entrenadores()
+            .then((res) => setEntrenadores(res.data))
+            .catch(() => toast.error("Error al cargar Entrenadores"))
+    }, [])
     return (
         <div>
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
                     <div>
                         <CardTitle>Entrenadores</CardTitle>
-                        <CardDescription>Personal de entrenamiento y sus especialidades</CardDescription>
+                        <CardDescription>Listado del personal</CardDescription>
                     </div>
-                    <Button>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Agregar Entrenador
-                    </Button>
+                    <Link href="/admin/entrenadores/nuevo-entrenador">
+                        <Button className="cursor-pointer">
+                            <Plus className="mr-2 h-4 w-4" />
+                            Agregar Entrenador
+                        </Button>
+                    </Link>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Entrenador</TableHead>
-                                <TableHead>Especialidad</TableHead>
-                                <TableHead>Clientes</TableHead>
-                                <TableHead>Calificación</TableHead>
-                                <TableHead>Estado</TableHead>
+                                <TableHead>Nombre</TableHead>
+                                <TableHead>Email</TableHead>
+                                <TableHead>Teléfono</TableHead>
+                                <TableHead>Fecha de Registro</TableHead>
                                 <TableHead>Acciones</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {trainers.map((trainer) => (
-                                <TableRow key={trainer.id}>
-                                    <TableCell className="font-medium">{trainer.name}</TableCell>
-                                    <TableCell>{trainer.specialty}</TableCell>
-                                    <TableCell>{trainer.clients}</TableCell>
+                            {entrenadores.map((entrenador) => (
+                                <TableRow key={entrenador._id}>
                                     <TableCell>
-                                        <div className="flex items-center">
-                                            <span className="mr-1">⭐</span>
-                                            {trainer.rating}
+                                        <div className="font-medium">
+                                            {entrenador.nombre}, {entrenador.apellido}
                                         </div>
                                     </TableCell>
+                                    <TableCell>{entrenador.email}</TableCell>
+                                    <TableCell>{entrenador.telefono}</TableCell>
                                     <TableCell>
-                                        <Badge variant="default">{trainer.status}</Badge>
+                                        {new Date(entrenador.createdAt).toLocaleDateString("es-AR")}
                                     </TableCell>
                                     <TableCell>
                                         <DropdownMenu>
