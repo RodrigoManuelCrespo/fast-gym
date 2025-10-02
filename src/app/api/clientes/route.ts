@@ -11,7 +11,7 @@ export async function GET(req: Request) {
         await connectToDB()
 
         const clientes = await User.find({ role: "cliente" }).select("-password")
-
+        //console.log(clientes); /* muestra lo que me trae de la base de datos */
         return NextResponse.json({ data: clientes }, { status: 200 })
     } catch (error) {
         console.error("Error al obtener clientes:", error)
