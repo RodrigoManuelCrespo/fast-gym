@@ -1,5 +1,3 @@
-// /app/api/rutinas/route.ts
-
 import { NextResponse } from "next/server"
 import { connectToDB } from "@/lib/mongodb"
 import { withAuthRoute } from "@/lib/withAuthRoute"

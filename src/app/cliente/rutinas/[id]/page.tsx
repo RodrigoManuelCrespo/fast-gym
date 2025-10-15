@@ -80,7 +80,6 @@ export default function RutinaDetallePage() {
 
             <div className="max-w-2xl mx-auto px-4 py-6 space-y-4">
                 {rutina.ejercicios.map((ej, index) => (
-                    console.log(ej),
                     <Card
                         key={index}
                         className={`overflow-hidden transition-all ${completados.includes(index)
