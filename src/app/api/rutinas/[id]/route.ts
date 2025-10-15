@@ -7,9 +7,9 @@ import { Ejercicio } from "@/models/EjercicioModel"
 
 export async function GET(
     req: NextRequest,
-    context: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
-    const { id } = context.params
+    const { id } = await context.params;
 
     const result = await withAuthRoute(req, ["entrenador", "cliente"])
     if (!("user" in result)) return result
