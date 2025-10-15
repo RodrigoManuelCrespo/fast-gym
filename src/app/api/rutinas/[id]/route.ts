@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
 import { connectToDB } from "@/lib/mongodb"
 import { withAuthRoute } from "@/lib/withAuthRoute"
 import { Rutina } from "@/models/RutinaModel"
 import { Ejercicio } from "@/models/EjercicioModel"
 
-export async function GET(req: Request, context: { params: { id: string } }) {
-    const { params } = context
+export async function GET(
+    req: NextRequest,
+    context: { params: { id: string } }
+) {
+    const { id } = context.params
 
     const result = await withAuthRoute(req, ["entrenador", "cliente"])
     if (!("user" in result)) return result
@@ -14,7 +18,7 @@ export async function GET(req: Request, context: { params: { id: string } }) {
         await connectToDB()
         console.log(Ejercicio.modelName) // fuerza el registro del schema
 
-        const rutina = await Rutina.findById(params.id)
+        const rutina = await Rutina.findById(id)
             .populate("clienteId", "nombre apellido")
             .populate("entrenadorId", "nombre apellido")
             .populate("ejercicios.ejercicioId")
