@@ -9,6 +9,8 @@ export interface Rutina {
     dias: string[]
     estado: "activa" | "completada" | "suspendida"
     fechaAsignacion: string
+    observaciones?: string
+
     ejercicios: {
         ejercicioId: {
             _id: string
@@ -20,5 +22,6 @@ export interface Rutina {
         series: number
         repeticiones: number
         descanso: string
+        observacion?: string // 🔹 nuevo
     }[]
 }

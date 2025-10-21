@@ -31,8 +31,9 @@ export default function NuevaRutinaForm() {
       series: number
       repeticiones: number
       descanso: string
+      observacion?: string  // 🔹 campo nuevo
     }[],
-    observaciones: "",
+    observaciones: "", // 🔹 observación general
   })
 
   useEffect(() => {
@@ -62,7 +63,10 @@ export default function NuevaRutinaForm() {
   const agregarEjercicio = () => {
     setForm({
       ...form,
-      ejercicios: [...form.ejercicios, { ejercicioId: "", series: 4, repeticiones: 12, descanso: "60s" }],
+      ejercicios: [
+        ...form.ejercicios,
+        { ejercicioId: "", series: 4, repeticiones: 12, descanso: "60s", observacion: "" },
+      ],
     })
   }
 
@@ -132,7 +136,7 @@ export default function NuevaRutinaForm() {
               </Button>
             </div>
 
-            {/* Header de columnas */}
+            {/* Header columnas */}
             <div className="hidden md:grid grid-cols-[2fr_1fr_1fr_1fr_40px] gap-4 text-sm text-muted-foreground">
               <span>Ejercicio</span>
               <span>Series</span>
@@ -142,74 +146,83 @@ export default function NuevaRutinaForm() {
             </div>
 
             {form.ejercicios.map((ej, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_40px] gap-4 items-center">
-                {/* Select ejercicio */}
-                <Select
-                  value={ej.ejercicioId}
-                  onValueChange={(val) => handleEjercicioChange(index, "ejercicioId", val)}
-                >
-                  <SelectTrigger className="w-full truncate">
-                    <SelectValue placeholder="Ejercicio" className="truncate" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {ejerciciosDisponibles.map((e) => (
-                      <SelectItem key={e._id ?? ''} value={e._id ?? ''} className="truncate">
-                        {e.nombre}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <div key={index} className="space-y-2 border rounded-lg p-3 bg-muted/30">
+                <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr_40px] gap-4 items-center">
+                  {/* Select ejercicio */}
+                  <Select
+                    value={ej.ejercicioId}
+                    onValueChange={(val) => handleEjercicioChange(index, "ejercicioId", val)}
+                  >
+                    <SelectTrigger className="w-full truncate">
+                      <SelectValue placeholder="Ejercicio" className="truncate" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ejerciciosDisponibles.map((e) => (
+                        <SelectItem key={e._id ?? ''} value={e._id ?? ''} className="truncate">
+                          {e.nombre}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-                {/* Series */}
-                <Input
-                  type="number"
-                  placeholder="Series"
-                  value={ej.series}
-                  onChange={(e) => handleEjercicioChange(index, "series", Number(e.target.value))}
+                  {/* Series */}
+                  <Input
+                    type="number"
+                    placeholder="Series"
+                    value={ej.series}
+                    onChange={(e) => handleEjercicioChange(index, "series", Number(e.target.value))}
+                  />
+
+                  {/* Reps */}
+                  <Input
+                    type="number"
+                    placeholder="Reps"
+                    value={ej.repeticiones}
+                    onChange={(e) => handleEjercicioChange(index, "repeticiones", Number(e.target.value))}
+                  />
+
+                  {/* Descanso */}
+                  <Input
+                    type="text"
+                    placeholder="60s"
+                    value={ej.descanso}
+                    onChange={(e) => handleEjercicioChange(index, "descanso", e.target.value)}
+                  />
+
+                  {/* Eliminar */}
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon"
+                    onClick={() => {
+                      const nuevos = [...form.ejercicios]
+                      nuevos.splice(index, 1)
+                      setForm({ ...form, ejercicios: nuevos })
+                    }}
+                  >
+                    ×
+                  </Button>
+                </div>
+
+                {/* 🔹 Observación individual */}
+                <Textarea
+                  placeholder="Observaciones para este ejercicio (opcional)"
+                  value={ej.observacion || ""}
+                  onChange={(e) => handleEjercicioChange(index, "observacion", e.target.value)}
+                  className="text-sm"
                 />
-
-                {/* Reps */}
-                <Input
-                  type="number"
-                  placeholder="Reps"
-                  value={ej.repeticiones}
-                  onChange={(e) => handleEjercicioChange(index, "repeticiones", Number(e.target.value))}
-                />
-
-                {/* Descanso */}
-                <Input
-                  type="text"
-                  placeholder="60s"
-                  value={ej.descanso}
-                  onChange={(e) => handleEjercicioChange(index, "descanso", e.target.value)}
-                />
-
-                {/* Botón eliminar */}
-                <Button
-                  type="button"
-                  variant="destructive"
-                  size="icon"
-                  onClick={() => {
-                    const nuevos = [...form.ejercicios]
-                    nuevos.splice(index, 1)
-                    setForm({ ...form, ejercicios: nuevos })
-                  }}
-                >
-                  ×
-                </Button>
               </div>
             ))}
           </div>
 
-
-          {/* Observaciones */}
+          {/* 🔹 Observación general */}
           <div>
-            <p className="text-sm mb-1">Observaciones</p>
+            <p className="text-sm mb-1">Observaciones generales</p>
             <Textarea
               name="observaciones"
               value={form.observaciones}
               onChange={handleChange}
-              placeholder="Observaciones adicionales (opcional)"
+              placeholder="Observaciones generales sobre la rutina (opcional)"
             />
           </div>
 
