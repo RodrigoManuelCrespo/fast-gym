@@ -29,7 +29,6 @@ export async function GET(req: Request) {
     }
 }
 
-
 export async function POST(req: Request) {
     const result = await withAuthRoute(req, ["entrenador"])
     if (!("user" in result)) return result
@@ -41,6 +40,15 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Faltan datos obligatorios" }, { status: 400 })
         }
 
+        // 🔹 Validación de estructura de ejercicios (opcional pero recomendable)
+        const ejerciciosValidados = ejercicios.map((e) => ({
+            ejercicioId: e.ejercicioId,
+            series: e.series,
+            repeticiones: e.repeticiones,
+            descanso: e.descanso,
+            observacion: e.observacion || "", // asegurar campo siempre presente
+        }))
+
         await connectToDB()
 
         const nuevaRutina = await Rutina.create({
@@ -49,7 +57,7 @@ export async function POST(req: Request) {
             clienteId,
             entrenadorId: result.user.id,
             dias,
-            ejercicios,
+            ejercicios: ejerciciosValidados,
             observaciones,
         })
 
