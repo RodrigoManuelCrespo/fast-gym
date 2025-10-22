@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Calendar, Dumbbell, Play } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Calendar, Dumbbell, Play, Clock } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { rutinaService } from "@/lib/services/rutinaService"
@@ -11,6 +11,9 @@ import Link from "next/link"
 
 export default function ClienteHome() {
     const [rutinas, setRutinas] = useState<Rutina[]>([])
+    const [clases, setClases] = useState<
+        { id: number; nombre: string; fecha: string; hora: string; entrenador: string }[]
+    >([])
 
     useEffect(() => {
         const fetchRutinas = async () => {
@@ -21,6 +24,14 @@ export default function ClienteHome() {
                 console.error("Error al obtener rutinas:", error)
             }
         }
+
+        // Simulamos próximas clases sin backend
+        const mockClases = [
+            { id: 1, nombre: "Funcional", fecha: "2025-10-23", hora: "18:00", entrenador: "Sofía Gómez" },
+            { id: 2, nombre: "Crossfit", fecha: "2025-10-25", hora: "19:30", entrenador: "Lucas Torres" },
+            { id: 3, nombre: "Spinning", fecha: "2025-10-27", hora: "17:00", entrenador: "Martina Díaz" },
+        ]
+        setClases(mockClases)
 
         fetchRutinas()
     }, [])
@@ -59,6 +70,39 @@ export default function ClienteHome() {
                     </div>
                 )}
             </div>
+
+            {/* 🔹 Próximas clases */}
+            <div className="max-w-4xl mx-auto px-4 mt-6">
+                <Card className="bg-gray-800 border border-gray-700">
+                    <CardHeader>
+                        <CardTitle className="text-white text-lg flex items-center">
+                            <Clock className="h-5 w-5 mr-2 text-blue-400" /> Próximas Clases
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                        {clases.map((clase) => (
+                            <div
+                                key={clase.id}
+                                className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-gray-700 pb-2 last:border-none"
+                            >
+                                <div>
+                                    <p className="font-medium text-white">{clase.nombre}</p>
+                                    <p className="text-gray-400 text-sm">
+                                        {new Date(clase.fecha).toLocaleDateString("es-AR")} – {clase.hora} hs
+                                    </p>
+                                    <p className="text-gray-500 text-xs">Entrenador: {clase.entrenador}</p>
+                                </div>
+                                <Button
+                                    size="sm"
+                                    className="mt-2 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white"
+                                >
+                                    Ver Detalles
+                                </Button>
+                            </div>
+                        ))}
+                    </CardContent>
+                </Card>
+            </div>
         </div>
     )
 }
@@ -81,7 +125,7 @@ function RoutineCard({ routine }: RoutineCardProps) {
                         <div>
                             <h3 className="font-semibold text-lg mb-1">{routine.nombre}</h3>
                             <div className="flex items-center gap-3 text-sm text-white/90">
-                                <span className="text-xs">{routine.estado}</span>
+                                <span className="text-xs capitalize">{routine.estado}</span>
                             </div>
                         </div>
                         <div className="bg-white/20 p-2 rounded-lg">
@@ -95,7 +139,7 @@ function RoutineCard({ routine }: RoutineCardProps) {
                     {/* Días */}
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-300">Días:</span>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 flex-wrap justify-end">
                             {routine.dias.map((dia) => (
                                 <Badge key={dia} variant="secondary" className="text-xs px-2 py-1">
                                     {dia}
